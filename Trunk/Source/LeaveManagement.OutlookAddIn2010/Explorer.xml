@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<customUI onLoad="Ribbon_Load" xmlns="http://schemas.microsoft.com/office/2009/07/customui">
+  <ribbon>
+    <tabs>
+      <tab idMso="TabMail">
+        <group label="Leave Management" id="LmGroup"
+               supertip="Leave Management for managing leave.">
+          <button id="LmPendingButton"
+                  label="Pending"
+                  size="normal"
+                  imageMso="FilePrepareMenu"
+                  screentip="Review the Pending requests"
+                  supertip="Review the Pending requests"
+                  getVisible="OnGetVisible"
+                  onAction="OnPendingButtonClick" />
+          <!--imageMso="CheckNames"-->
+          <button id="LmNewHireButton"
+                  label="New Hire"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open the New Hire Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnNewHireButtonClick" />
+          <button id="LmAdjustmentButton"
+                  label="Adjustment"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open the Adjustment Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnAdjustmentButtonClick" />
+          <button id="LmLeaverButton"
+                  label="Leaver"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open the Leaver Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnLeaverButtonClick" />
+          <button id="LmDelegateButton"
+                  label="Delegate"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open Delegate the Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnDelegateButtonClick" />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+  <backstage>
+    <tab id="LmBackstageTab"
+           label="Leave Management"
+           getVisible="Backstage_OnGetVisible">
+      <firstColumn>
+        <group id="LmFirstGroup"
+               label="First Group"
+               helperText="The first group of info.">
+        </group>
+      </firstColumn>
+      <secondColumn>
+        <group id="LmSecondGroup"
+               label="Second Group"
+               helperText="The second group of info.">
+        </group>
+      </secondColumn>
+    </tab>
+  </backstage>
+</customUI>
