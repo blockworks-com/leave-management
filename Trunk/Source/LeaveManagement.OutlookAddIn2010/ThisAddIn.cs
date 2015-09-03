@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
@@ -23,7 +24,13 @@ namespace LeaveManagement.OutlookAddIn2010
 
         private Outlook.Application _application;
         private Outlook.Explorers _explorers;
+        private Outlook.MAPIFolder _inbox;
         private Outlook.Inspectors _inspectors;
+
+        private Outlook.Items _items;
+
+        // Inbox variables
+        private Outlook.NameSpace _outlookNameSpace;
 
         #endregion Instance Variables
 
@@ -37,6 +44,9 @@ namespace LeaveManagement.OutlookAddIn2010
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
             // Unhook event handlers
+            _items.ItemAdd -=
+                Inbox_NewItem;
+
             _explorers.NewExplorer -=
                 new Outlook.ExplorersEvents_NewExplorerEventHandler(
                     Explorers_NewExplorer);
@@ -45,6 +55,9 @@ namespace LeaveManagement.OutlookAddIn2010
                     Inspectors_NewInspector);
 
             // Dereference objects
+            _items = null;
+            _inbox = null;
+            _outlookNameSpace = null;
             _pictdisp = null;
             _explorers = null;
             _inspectors = null;
@@ -64,6 +77,10 @@ namespace LeaveManagement.OutlookAddIn2010
             _inspectors = _application.Inspectors;
             _windows = new List<OutlookExplorer>();
             _inspectorWindows = new List<OutlookInspector>();
+
+            _outlookNameSpace = Application.GetNamespace("MAPI");
+            _inbox = _outlookNameSpace.GetDefaultFolder(
+                Outlook.OlDefaultFolders.olFolderInbox);
 
             // Wire up event handlers to handle multiple Explorer windows
             _explorers.NewExplorer +=
@@ -86,6 +103,11 @@ namespace LeaveManagement.OutlookAddIn2010
             window.InvalidateControl += new EventHandler<
                 OutlookExplorer.InvalidateEventArgs>(
                 WrappedWindow_InvalidateControl);
+
+            // Wire up event handler to handle incoming inbox items
+            _items = _inbox.Items;
+            _items.ItemAdd +=
+                Inbox_NewItem;
 
             // Get IPictureDisp for CurrentUser on startup
             try
@@ -175,6 +197,29 @@ namespace LeaveManagement.OutlookAddIn2010
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// The NewItem event fires whenever a new Item arrives in the inbox.
+        /// </summary>
+        /// <param name="Item"></param>
+        private void Inbox_NewItem(object Item)
+        {
+            string filter = "New Hire Advisement - ";
+
+            OutlookItem olItem =
+                new OutlookItem(Item);
+
+            if (olItem != null)
+            {
+                if (olItem.MessageClass == "IPM.Note" &&
+                    olItem.Subject.StartsWith(filter, true, null))
+                {
+                    string msg = "New Joiner item in Inbox";
+                    MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
