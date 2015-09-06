@@ -321,7 +321,7 @@ namespace LeaveManagement.OutlookAddIn2010
             StringBuilder sb = new StringBuilder(ribbonId);
 
             sb.Replace(".", "");
-            sb.Replace("Microsoft.Outlook", "LeaveManagement.OutlookAddIn2010.Ribbon");
+            sb.Replace("MicrosoftOutlook", "LeaveManagement.OutlookAddIn2010.Ribbon");
             sb.Append(".xml");
 
             return GetResourceText(sb.ToString());
