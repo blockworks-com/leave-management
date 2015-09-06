@@ -236,15 +236,20 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Explorer.xml">
+    <EmbeddedResource Include="RibbonExplorer.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReadMail.xml">
+    <EmbeddedResource Include="RibbonMailRead.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Appointment.xml">
+    <EmbeddedResource Include="RibbonAppointment.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RibbonMailCompose.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

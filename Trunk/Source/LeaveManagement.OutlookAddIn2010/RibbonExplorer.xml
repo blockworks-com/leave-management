@@ -5,14 +5,6 @@
       <tab idMso="TabMail">
         <group label="Leave Management" id="LmGroup"
                supertip="Leave Management for managing leave.">
-          <button id="LmPendingButton"
-                  label="Pending"
-                  size="normal"
-                  imageMso="FilePrepareMenu"
-                  screentip="Review the Pending requests"
-                  supertip="Review the Pending requests"
-                  getVisible="OnGetVisible"
-                  onAction="OnPendingButtonClick" />
           <!--imageMso="CheckNames"-->
           <button id="LmNewHireButton"
                   label="New Hire"
@@ -28,13 +20,6 @@
                   supertip="Open the Adjustment Pane."
                   getVisible="OnGetVisible"
                   onAction="OnAdjustmentButtonClick" />
-          <button id="LmLeaverButton"
-                  label="Leaver"
-                  size="normal"
-                  screentip="Text"
-                  supertip="Open the Leaver Pane."
-                  getVisible="OnGetVisible"
-                  onAction="OnLeaverButtonClick" />
           <button id="LmDelegateButton"
                   label="Delegate"
                   size="normal"
@@ -42,6 +27,22 @@
                   supertip="Open Delegate the Pane."
                   getVisible="OnGetVisible"
                   onAction="OnDelegateButtonClick" />
+          <button id="LmLeaverButton"
+                  label="Leaver"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open the Leaver Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnLeaverButtonClick" />
+          <separator id="separatorExplorer" />
+          <button id="LmPendingButton"
+                  label="Pending"
+                  size="normal"
+                  imageMso="FilePrepareMenu"
+                  screentip="Review the Pending requests"
+                  supertip="Review the Pending requests"
+                  getVisible="OnGetVisible"
+                  onAction="OnPendingButtonClick" />
         </group>
       </tab>
     </tabs>

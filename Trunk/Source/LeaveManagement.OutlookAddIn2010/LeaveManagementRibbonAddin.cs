@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
@@ -13,11 +14,14 @@ namespace LeaveManagement.OutlookAddIn2010
     [ComVisible(true)]
     public class LeaveManagementRibbonAddin : Office.IRibbonExtensibility
     {
+        #region Member Variables
+
         private Outlook.Application _outlookApplication;
         private Office.IRibbonUI _ribbon;
 
-        //Override of constructor to pass
-        // a trusted Outlook.Application object
+        #endregion Member Variables
+
+        // Override of constructor to pass a trusted Outlook.Application object
         public LeaveManagementRibbonAddin(Outlook.Application outlookApplication)
         {
             _outlookApplication = outlookApplication as Outlook.Application;
@@ -27,25 +31,19 @@ namespace LeaveManagement.OutlookAddIn2010
 
         public string GetCustomUI(string ribbonID)
         {
-            string customUI = string.Empty;
-            Debug.WriteLine(ribbonID);
+            string result = string.Empty;
 
-            //Return the appropriate Ribbon XML for ribbonID
-            switch (ribbonID)
+            // Let's do this by convention instead of defining all of the cases and xml strings. For example:
+            // Microsoft.Outlook.Mail.Read will become LeaveManagement.OutlookAddIn2010.RibbonMailRead.xml
+            try
             {
-                case "Microsoft.Outlook.Explorer":
-                    customUI = GetResourceText(
-                        "LeaveManagement.OutlookAddIn2010.Explorer.xml");
-                    return customUI;
-
-                case "Microsoft.Outlook.Mail.Read":
-                    customUI = GetResourceText(
-                        "LeaveManagement.OutlookAddIn2010.ReadMail.xml");
-                    return customUI;
-
-                default:
-                    return string.Empty;
+                result = GetResourceTextUsingConvention(ribbonID);
             }
+            catch (Exception)
+            {
+            }
+
+            return result;
         }
 
         #endregion IRibbonExtensibility Members
@@ -293,6 +291,20 @@ namespace LeaveManagement.OutlookAddIn2010
                 }
             }
             return null;
+        }
+
+        private static string GetResourceTextUsingConvention(string ribbonId)
+        {
+            // Replace namespace: Microsoft.Outlook.Mail.Read becomes LeaveManagement.OutlookAddIn2010.RibbonMailRead.
+            // Append .xml.
+
+            StringBuilder sb = new StringBuilder(ribbonId);
+
+            sb.Replace(".", "");
+            sb.Replace("Microsoft.Outlook", "LeaveManagement.OutlookAddIn2010.Ribbon");
+            sb.Append(".xml");
+
+            return GetResourceText(sb.ToString());
         }
 
         private List<OutlookItem> GetItems(Office.IRibbonControl control)

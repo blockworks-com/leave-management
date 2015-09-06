@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="Leave Management Outlook Addin v1.1" Language="1033" Version="1.1.0.0" Manufacturer="Blockworks Software" UpgradeCode="89EB919E-B7E5-4A90-AC8F-9B375943B1D5">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Upgrade Id="89EB919E-B7E5-4A90-AC8F-9B375943B1D5">
+      <UpgradeVersion Property="OLDVERSIONFOUND" IncludeMinimum="no" Minimum="1.0.0.0" />
+    </Upgrade>
+
+    <Feature Id="ProductFeature" Title="Leave Management Outlook Addin" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="COMPANYFOLDER" Name="Blockworks Software">
+          <Directory Id="INSTALLFOLDER" Name="Leave Management" />
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="LeaveManagement" Name="Leave Management">
+          <Directory Id="StartMenuDir" Name="Leave Management Outlook Addin"></Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="StartMenuDir">
+      <Component Id="ApplicationShortcut" Guid="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
+        <!--<Shortcut Id="ApplicationStartMenuShortcut"
+						Name="View File Repository"
+						Description="Open the file repository file."
+						WorkingDirectory="LeaveManagementAddin" />-->
+        <RemoveFolder Id="StartMenuDir" On="uninstall" />
+        <RemoveFolder Id="LeaveManagement" Directory="LeaveManagement" On="uninstall" />
+        <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\Blockworks\Leave Management Outlook Addin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="Addin">
+        <File Id="FILE_AddIn" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinManifest">
+        <File Id="FILE_DllManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).manifest" KeyPath="yes" />
+      </Component>
+      <!--<Component Id="AddinConfig">
+        <File Id="FILE_Config" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).config" KeyPath="yes" />
+      </Component>-->
+
+      <!--<Component Id="AddinFeatureToggle">
+        <File Id="FILE_AddInFeatureToggle" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)FeatureToggle.Core.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinUserContext">
+        <File Id="FILE_AddInUserContext" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.UserContext.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinUserContextAD">
+        <File Id="FILE_AddInUserContextAD" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.UserContext.ActiveDirectory.dll" KeyPath="yes" />
+      </Component>-->
+
+      <!--<Component Id="AddinRepository">
+        <File Id="FILE_AddInRepository" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Repository.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinModel">
+        <File Id="FILE_AddInModel" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Model.dll" KeyPath="yes" />
+      </Component>-->
+      <!--<Component Id="ManifestFile">
+        <File Id="FILE_Manifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Manifest.xml" KeyPath="yes" />
+      </Component>-->
+      <Component Id="VstoManifest">
+        <File Id="FILE_VstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" KeyPath="yes" />
+        <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
+          <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
+          <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
+          <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
+          <RegistryValue Name="Manifest" Value="[#FILE_VstoManifest]|vstolocal" Type="string" Action="write" />
+        </RegistryKey>
+      </Component>
+      <Component Id="ToolsCommon">
+        <File Id="FILE_ToolsCommon" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinToolsOutlook">
+        <File Id="FILE_ToolsOutlook" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" KeyPath="yes" />
+      </Component>
+      <!--<Component Id="ToolsNewtonJsonDll">
+        <File Id="FILE_ToolsNewtonJsonDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Newtonsoft.Json.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="ToolsNewtonJsonXml">
+        <File Id="FILE_ToolsNewtonJsonXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Newtonsoft.Json.xml" KeyPath="yes" />
+      </Component>-->
+    </ComponentGroup>
+  </Fragment>
+</Wix>

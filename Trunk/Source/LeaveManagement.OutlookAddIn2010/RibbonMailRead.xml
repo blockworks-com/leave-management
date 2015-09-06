@@ -19,13 +19,6 @@
                   supertip="Open the Adjustment Pane."
                   getVisible="OnGetVisible"
                   onAction="OnAdjustmentButtonClick" />
-          <button id="LmLeaverButton"
-                  label="Leaver"
-                  size="normal"
-                  screentip="Text"
-                  supertip="Open the Leaver Pane."
-                  getVisible="OnGetVisible"
-                  onAction="OnLeaverButtonClick" />
           <button id="LmDelegateButton"
                   label="Delegate"
                   size="normal"
@@ -33,6 +26,14 @@
                   supertip="Open Delegate the Pane."
                   getVisible="OnGetVisible"
                   onAction="OnDelegateButtonClick" />
+          <button id="LmLeaverButton"
+                  label="Leaver"
+                  size="normal"
+                  screentip="Text"
+                  supertip="Open the Leaver Pane."
+                  getVisible="OnGetVisible"
+                  onAction="OnLeaverButtonClick" />
+          <!--<separator id="separatorRead" />-->
         </group>
       </tab>
     </tabs>
