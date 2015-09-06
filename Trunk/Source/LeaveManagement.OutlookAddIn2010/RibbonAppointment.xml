@@ -5,13 +5,13 @@
       <tab idMso="TabAppointment">
         <group label="Leave Management" id="LmGroup"
                supertip="Leave Management for managing leave.">
-          <button id="LmLeaveRequestButton"
+          <button id="LmLeaveRequestComposeButton"
                   label="Process"
                   size="normal"
                   screentip="Text"
                   supertip="Process the Leave Request."
                   getVisible="OnGetVisible"
-                  onAction="OnLeaveRequestButtonClick" />
+                  onAction="OnLeaveRequestComposeButtonClick" />
         </group>
       </tab>
     </tabs>

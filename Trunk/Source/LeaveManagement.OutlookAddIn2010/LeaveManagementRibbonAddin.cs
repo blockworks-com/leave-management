@@ -77,6 +77,7 @@ namespace LeaveManagement.OutlookAddIn2010
             bool result = false;
             switch (control.Id)
             {
+                // Buttons to Read and Handle received items
                 case "LmNewHireButton":
                     result = true;
                     break;
@@ -85,19 +86,38 @@ namespace LeaveManagement.OutlookAddIn2010
                     result = true;
                     break;
 
-                case "LmLeaverButton":
-                    result = true;
-                    break;
-
                 case "LmDelegateButton":
                     result = true;
                     break;
 
+                case "LmLeaverButton":
+                    result = true;
+                    break;
+
+                // Buttons to Create new requests
+                case "LmNewHireComposeButton":
+                    result = true;
+                    break;
+
+                case "LmAdjustmentComposeButton":
+                    result = true;
+                    break;
+
+                case "LmDelegateComposeButton":
+                    result = true;
+                    break;
+
+                case "LmLeaverComposeButton":
+                    result = true;
+                    break;
+
+                // Button to Show and Handle items
                 case "LmPendingButton":
                     result = true;
                     break;
 
-                case "LmLeaveRequestButton":
+                // Buttons to Create new leave requests
+                case "LmLeaveRequestComposeButton":
                     result = false;
                     break;
             }
@@ -224,7 +244,7 @@ namespace LeaveManagement.OutlookAddIn2010
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public void OnLeaveRequestButtonClick(Office.IRibbonControl control)
+        public void OnLeaveRequestComposeButtonClick(Office.IRibbonControl control)
         {
             List<OutlookItem> items = GetItems(control);
             string msg = "Leave request";
