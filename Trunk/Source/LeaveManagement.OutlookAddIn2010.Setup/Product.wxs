@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Leave Management Outlook Addin v1.1" Language="1033" Version="1.1.0.0" Manufacturer="Blockworks Software" UpgradeCode="89EB919E-B7E5-4A90-AC8F-9B375943B1D5">
+  <Product Id="*" Name="Leave Management Outlook Addin v1.2" Language="1033" Version="1.2.0.0" Manufacturer="Blockworks Software" UpgradeCode="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
-    <Upgrade Id="89EB919E-B7E5-4A90-AC8F-9B375943B1D5">
-      <UpgradeVersion Property="OLDVERSIONFOUND" IncludeMinimum="no" Minimum="1.0.0.0" />
+    <Upgrade Id="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
+      <UpgradeVersion Property="OLDVERSIONFOUND" IncludeMinimum="no" Minimum="1.1.0.0" />
     </Upgrade>
 
     <Feature Id="ProductFeature" Title="Leave Management Outlook Addin" Level="1">
@@ -34,7 +34,7 @@
 
   <Fragment>
     <DirectoryRef Id="StartMenuDir">
-      <Component Id="ApplicationShortcut" Guid="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
+      <Component Id="ApplicationShortcut" Guid="DF713EFA-4AF5-4AA4-AF4C-11B2BC707A78">
         <!--<Shortcut Id="ApplicationStartMenuShortcut"
 						Name="View File Repository"
 						Description="Open the file repository file."

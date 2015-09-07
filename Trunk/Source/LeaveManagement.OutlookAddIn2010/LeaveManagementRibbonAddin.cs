@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LeaveManagement.Common;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -222,10 +223,15 @@ namespace LeaveManagement.OutlookAddIn2010
 
         public void OnAdjustmentButtonClick(Office.IRibbonControl control)
         {
+            DateTime startTime = DateTime.Now;
+            LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
             List<OutlookItem> items = GetItems(control);
             string msg = "Adjustment";
             MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
         }
 
         public void OnDelegateButtonClick(Office.IRibbonControl control)
