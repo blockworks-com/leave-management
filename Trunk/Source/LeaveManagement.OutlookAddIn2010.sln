@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaveManagement.OutlookAddIn2010", "LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010.csproj", "{28BE4413-4664-4F3A-96F9-19F68131C984}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "LeaveManagement.OutlookAddin.Setup", "LeaveManagement.OutlookAddIn2010.Setup\LeaveManagement.OutlookAddin.Setup.wixproj", "{2D403C09-13EB-493A-A9C4-CA8004C6A827}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F63EDB78-1826-4980-8DEA-9C72AFBBA54F} = {F63EDB78-1826-4980-8DEA-9C72AFBBA54F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaveManagement.Common", "LeaveManagement.Common\LeaveManagement.Common.csproj", "{F63EDB78-1826-4980-8DEA-9C72AFBBA54F}"
 EndProject
@@ -26,6 +29,7 @@ Global
 		{28BE4413-4664-4F3A-96F9-19F68131C984}.Release|x86.ActiveCfg = Release|Any CPU
 		{28BE4413-4664-4F3A-96F9-19F68131C984}.Release|x86.Build.0 = Release|Any CPU
 		{2D403C09-13EB-493A-A9C4-CA8004C6A827}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2D403C09-13EB-493A-A9C4-CA8004C6A827}.Debug|Any CPU.Build.0 = Debug|x86
 		{2D403C09-13EB-493A-A9C4-CA8004C6A827}.Debug|x86.ActiveCfg = Debug|x86
 		{2D403C09-13EB-493A-A9C4-CA8004C6A827}.Debug|x86.Build.0 = Debug|x86
 		{2D403C09-13EB-493A-A9C4-CA8004C6A827}.Release|Any CPU.ActiveCfg = Release|x86

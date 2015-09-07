@@ -35,29 +35,34 @@
   <Fragment>
     <DirectoryRef Id="StartMenuDir">
       <Component Id="ApplicationShortcut" Guid="DF713EFA-4AF5-4AA4-AF4C-11B2BC707A78">
-        <!--<Shortcut Id="ApplicationStartMenuShortcut"
-						Name="View File Repository"
-						Description="Open the file repository file."
-						WorkingDirectory="LeaveManagementAddin" />-->
+        <Shortcut Id="ApplicationStartMenuShortcut"
+						Name="View Log File"
+						Description="Open the log file."
+            Target="[logfile.log]"
+						WorkingDirectory="LeaveManagementAddin" />
         <RemoveFolder Id="StartMenuDir" On="uninstall" />
         <RemoveFolder Id="LeaveManagement" Directory="LeaveManagement" On="uninstall" />
         <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\Blockworks\Leave Management Outlook Addin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKCU" Key="Software\Blockworks Software\Leave Management Outlook Addin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
 
   <Fragment>
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-      <Component Id="Addin">
-        <File Id="FILE_AddIn" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath)" KeyPath="yes" />
+      <Component Id="LeaveManagementCommonDll">
+        <File Id="FILE_LeaveManagementCommonDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Common.dll" KeyPath="yes" />
+      </Component>
+
+      <Component Id="AddinDll">
+        <File Id="FILE_AddinDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="AddinConfig">
+        <File Id="FILE_AddinConfig" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).config" KeyPath="yes" />
       </Component>
       <Component Id="AddinManifest">
-        <File Id="FILE_DllManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).manifest" KeyPath="yes" />
+        <File Id="FILE_AddinManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).manifest" KeyPath="yes" />
       </Component>
-      <!--<Component Id="AddinConfig">
-        <File Id="FILE_Config" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).config" KeyPath="yes" />
-      </Component>-->
 
       <!--<Component Id="AddinFeatureToggle">
         <File Id="FILE_AddInFeatureToggle" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)FeatureToggle.Core.dll" KeyPath="yes" />
@@ -75,30 +80,59 @@
       <Component Id="AddinModel">
         <File Id="FILE_AddInModel" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Model.dll" KeyPath="yes" />
       </Component>-->
+
       <!--<Component Id="ManifestFile">
         <File Id="FILE_Manifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Manifest.xml" KeyPath="yes" />
       </Component>-->
-      <Component Id="VstoManifest">
-        <File Id="FILE_VstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" KeyPath="yes" />
+      <Component Id="AddinVstoManifest">
+        <File Id="FILE_AddinVstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" KeyPath="yes" />
         <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
           <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
           <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
           <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
-          <RegistryValue Name="Manifest" Value="[#FILE_VstoManifest]|vstolocal" Type="string" Action="write" />
+          <RegistryValue Name="Manifest" Value="[#FILE_AddinVstoManifest]|vstolocal" Type="string" Action="write" />
         </RegistryKey>
       </Component>
-      <Component Id="ToolsCommon">
-        <File Id="FILE_ToolsCommon" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" KeyPath="yes" />
+
+      <Component Id="ToolsCommonUtilitiesDll">
+        <File Id="FILE_ToolsCommonUtilitiesDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" KeyPath="yes" />
       </Component>
-      <Component Id="AddinToolsOutlook">
-        <File Id="FILE_ToolsOutlook" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" KeyPath="yes" />
+      <Component Id="ToolsCommonUtilitiesXml">
+        <File Id="FILE_ToolsCommonUtilitiesXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.xml" KeyPath="yes" />
       </Component>
-      <!--<Component Id="ToolsNewtonJsonDll">
-        <File Id="FILE_ToolsNewtonJsonDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Newtonsoft.Json.dll" KeyPath="yes" />
+      <Component Id="ToolsOutlookUtilitiesDll">
+        <File Id="FILE_ToolsOutlookUtilitiesDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" KeyPath="yes" />
       </Component>
-      <Component Id="ToolsNewtonJsonXml">
-        <File Id="FILE_ToolsNewtonJsonXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Newtonsoft.Json.xml" KeyPath="yes" />
-      </Component>-->
+      <Component Id="ToolsOutlookUtilitiesXml">
+        <File Id="FILE_ToolsOutlookUtilitiesXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="OfficeToolsOutlookDll">
+        <File Id="FILE_OfficeToolsOutlookDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="OfficeToolsOutlookXml">
+        <File Id="FILE_OfficeToolsOutlookXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="OfficeToolsDll">
+        <File Id="FILE_OfficeToolsDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.v4.0.Framework.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="OfficeToolsXml">
+        <File Id="FILE_OfficeToolsXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.v4.0.Framework.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="VSToolsRuntimeDll">
+        <File Id="FILE_VSToolsRuntimeDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.VisualStudio.Tools.Applications.Runtime.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="VSToolsRuntimeXml">
+        <File Id="FILE_VSToolsRuntimeXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.VisualStudio.Tools.Applications.Runtime.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="NLogConfig">
+        <File Id="FILE_NLogConfig" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.config" KeyPath="yes" />
+      </Component>
+      <Component Id="NLogDll">
+        <File Id="FILE_NLogDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="NLogXml">
+        <File Id="FILE_NLogXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.xml" KeyPath="yes" />
+      </Component>
     </ComponentGroup>
   </Fragment>
 </Wix>

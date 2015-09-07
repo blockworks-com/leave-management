@@ -85,58 +85,54 @@ namespace LeaveManagement.OutlookAddIn2010
             {
                 LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-                //Contract.Requires(null != control);
-
-                if (null == control)
+                if (null != control)
                 {
-                    return false;
-                }
+                    switch (control.Id)
+                    {
+                        // Buttons to Read and Handle received items
+                        case "LmNewHireButton":
+                            result = true;
+                            break;
 
-                switch (control.Id)
-                {
-                    // Buttons to Read and Handle received items
-                    case "LmNewHireButton":
-                        result = true;
-                        break;
+                        case "LmAdjustmentButton":
+                            result = true;
+                            break;
 
-                    case "LmAdjustmentButton":
-                        result = true;
-                        break;
+                        case "LmDelegateButton":
+                            result = true;
+                            break;
 
-                    case "LmDelegateButton":
-                        result = true;
-                        break;
+                        case "LmLeaverButton":
+                            result = true;
+                            break;
 
-                    case "LmLeaverButton":
-                        result = true;
-                        break;
+                        // Buttons to Create new requests
+                        case "LmNewHireComposeButton":
+                            result = true;
+                            break;
 
-                    // Buttons to Create new requests
-                    case "LmNewHireComposeButton":
-                        result = true;
-                        break;
+                        case "LmAdjustmentComposeButton":
+                            result = true;
+                            break;
 
-                    case "LmAdjustmentComposeButton":
-                        result = true;
-                        break;
+                        case "LmDelegateComposeButton":
+                            result = true;
+                            break;
 
-                    case "LmDelegateComposeButton":
-                        result = true;
-                        break;
+                        case "LmLeaverComposeButton":
+                            result = true;
+                            break;
 
-                    case "LmLeaverComposeButton":
-                        result = true;
-                        break;
+                        // Button to Show and Handle items
+                        case "LmPendingButton":
+                            result = true;
+                            break;
 
-                    // Button to Show and Handle items
-                    case "LmPendingButton":
-                        result = true;
-                        break;
-
-                    // Buttons to Create new leave requests
-                    case "LmLeaveRequestComposeButton":
-                        result = false;
-                        break;
+                        // Buttons to Create new leave requests
+                        case "LmLeaveRequestComposeButton":
+                            result = false;
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -166,52 +162,47 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Outlook.Explorer explorer =
                         control.Context as Outlook.Explorer;
-                    Outlook.Selection selection = explorer.Selection;
-                    if (selection.Count == 1)
+                    if (explorer != null)
                     {
-                        if (selection[1] is Outlook.MailItem)
+                        Outlook.Selection selection = explorer.Selection;
+                        if (selection != null)
                         {
-                            Outlook.MailItem oMail =
-                                selection[1] as Outlook.MailItem;
-                            if (oMail.Sent == true)
+                            if (selection.Count == 1)
                             {
-                                result = true;
-                            }
-                            else
-                            {
-                                result = false;
+                                if (selection[1] is Outlook.MailItem)
+                                {
+                                    Outlook.MailItem oMail =
+                                        selection[1] as Outlook.MailItem;
+                                    if (oMail != null)
+                                    {
+                                        if (oMail.Sent == true)
+                                        {
+                                            result = true;
+                                        }
+                                    }
+                                }
                             }
                         }
-                        else
-                        {
-                            result = false;
-                        }
-                    }
-                    else
-                    {
-                        result = false;
                     }
                 }
                 else if (control.Context is Outlook.Inspector)
                 {
                     Outlook.Inspector oInsp =
                         control.Context as Outlook.Inspector;
-                    if (oInsp.CurrentItem is Outlook.MailItem)
+                    if (oInsp != null)
                     {
-                        Outlook.MailItem oMail =
-                            oInsp.CurrentItem as Outlook.MailItem;
-                        if (oMail.Sent == true)
+                        if (oInsp.CurrentItem is Outlook.MailItem)
                         {
-                            result = true;
+                            Outlook.MailItem oMail =
+                                oInsp.CurrentItem as Outlook.MailItem;
+                            if (oMail != null)
+                            {
+                                if (oMail.Sent == true)
+                                {
+                                    result = true;
+                                }
+                            }
                         }
-                        else
-                        {
-                            result = false;
-                        }
-                    }
-                    else
-                    {
-                        result = false;
                     }
                 }
                 else
@@ -245,22 +236,20 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Outlook.Inspector oInsp =
                         control.Context as Outlook.Inspector;
-                    if (oInsp.CurrentItem is Outlook.MailItem)
+                    if (oInsp != null)
                     {
-                        Outlook.MailItem oMail =
-                            oInsp.CurrentItem as Outlook.MailItem;
-                        if (oMail.Sent == true)
+                        if (oInsp.CurrentItem is Outlook.MailItem)
                         {
-                            result = true;
+                            Outlook.MailItem oMail =
+                                oInsp.CurrentItem as Outlook.MailItem;
+                            if (oMail != null)
+                            {
+                                if (oMail.Sent == true)
+                                {
+                                    result = true;
+                                }
+                            }
                         }
-                        else
-                        {
-                            result = false;
-                        }
-                    }
-                    else
-                    {
-                        result = false;
                     }
                 }
                 else
@@ -297,6 +286,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Adjustment";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -321,6 +312,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Delegate";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -345,6 +338,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Leaver";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -369,6 +364,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Leave request";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -393,6 +390,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Joiner";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -416,6 +415,8 @@ namespace LeaveManagement.OutlookAddIn2010
                 string msg = "Pending list";
                 MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                LogWrapper.UsageLogger.Info(string.Format("{0} took {1} milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             catch (Exception ex)
             {
@@ -441,14 +442,16 @@ namespace LeaveManagement.OutlookAddIn2010
             {
                 LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-                //stdole.IPictureDisp pictureDisp = null;
                 Outlook.AddressEntry addrEntry =
-                Globals.ThisAddIn.Application.Session.CurrentUser.AddressEntry;
-                if (addrEntry.Type == "EX")
+                    Globals.ThisAddIn.Application.Session.CurrentUser.AddressEntry;
+                if (addrEntry != null)
                 {
-                    if (Globals.ThisAddIn._pictdisp != null)
+                    if (addrEntry.Type == "EX")
                     {
-                        result = Globals.ThisAddIn._pictdisp;
+                        if (Globals.ThisAddIn._pictdisp != null)
+                        {
+                            result = Globals.ThisAddIn._pictdisp;
+                        }
                     }
                 }
             }
@@ -474,16 +477,19 @@ namespace LeaveManagement.OutlookAddIn2010
                 LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
                 Assembly asm = Assembly.GetExecutingAssembly();
-                string[] resourceNames = asm.GetManifestResourceNames();
-                for (int i = 0; i < resourceNames.Length; ++i)
+                if (asm != null)
                 {
-                    if (string.Compare(resourceName, resourceNames[i], StringComparison.OrdinalIgnoreCase) == 0)
+                    string[] resourceNames = asm.GetManifestResourceNames();
+                    for (int i = 0; i < resourceNames.Length; ++i)
                     {
-                        using (StreamReader resourceReader = new StreamReader(asm.GetManifestResourceStream(resourceNames[i])))
+                        if (string.Compare(resourceName, resourceNames[i], StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (resourceReader != null)
+                            using (StreamReader resourceReader = new StreamReader(asm.GetManifestResourceStream(resourceNames[i])))
                             {
-                                return resourceReader.ReadToEnd();
+                                if (resourceReader != null)
+                                {
+                                    return resourceReader.ReadToEnd();
+                                }
                             }
                         }
                     }
@@ -548,8 +554,11 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Outlook.AttachmentSelection attachSel =
                         control.Context as Outlook.AttachmentSelection;
-                    foreach (Outlook.Attachment attach in attachSel)
+                    if (attachSel != null)
                     {
+                        foreach (Outlook.Attachment attach in attachSel)
+                        {
+                        }
                     }
                 }
                 else if (control.Context is Outlook.Folder)
@@ -561,11 +570,17 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Outlook.Selection selection =
                         control.Context as Outlook.Selection;
-                    for (int i = 0; i < selection.Count; i++)
+                    if (selection != null)
                     {
-                        OutlookItem olItem =
-                            new OutlookItem(selection[i + 1]); // 1 based index
-                        result.Add(olItem);
+                        for (int i = 0; i < selection.Count; i++)
+                        {
+                            OutlookItem olItem =
+                                new OutlookItem(selection[i + 1]); // 1 based index
+                            if (olItem != null)
+                            {
+                                result.Add(olItem);
+                            }
+                        }
                     }
                 }
                 else if (control.Context is Outlook.OutlookBarShortcut)
@@ -587,21 +602,36 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Outlook.Inspector insp =
                         control.Context as Outlook.Inspector;
-                    OutlookItem olItem =
-                        new OutlookItem(insp.CurrentItem);
-                    result.Add(olItem);
+                    if (insp != null)
+                    {
+                        OutlookItem olItem =
+                            new OutlookItem(insp.CurrentItem);
+                        if (olItem != null)
+                        {
+                            result.Add(olItem);
+                        }
+                    }
                 }
                 else if (control.Context is Outlook.Explorer)
                 {
                     Outlook.Explorer explorer =
                         control.Context as Outlook.Explorer;
-                    Outlook.Selection selection =
-                        explorer.Selection;
-                    for (int i = 0; i < selection.Count; i++)
+                    if (explorer != null)
                     {
-                        OutlookItem olItem =
-                            new OutlookItem(selection[i + 1]); // 1 based index
-                        result.Add(olItem);
+                        Outlook.Selection selection =
+                            explorer.Selection;
+                        if (selection != null)
+                        {
+                            for (int i = 0; i < selection.Count; i++)
+                            {
+                                OutlookItem olItem =
+                                    new OutlookItem(selection[i + 1]); // 1 based index
+                                if (olItem != null)
+                                {
+                                    result.Add(olItem);
+                                }
+                            }
+                        }
                     }
                 }
                 else if (control.Context is Outlook.NavigationGroup)
@@ -614,16 +644,18 @@ namespace LeaveManagement.OutlookAddIn2010
                 {
                     Office.IMsoContactCard card =
                         control.Context as Office.IMsoContactCard;
-                    if (card.AddressType ==
-                        Office.MsoContactCardAddressType.
-                        msoContactCardAddressTypeOutlook)
+                    if (card != null)
                     {
-                        // IMSOContactCard.Address is AddressEntry.ID
-                        Outlook.AddressEntry addr =
-                            Globals.ThisAddIn.Application.Session.GetAddressEntryFromID(
-                            card.Address);
-                        if (addr != null)
+                        if (card.AddressType ==
+                            Office.MsoContactCardAddressType.msoContactCardAddressTypeOutlook)
                         {
+                            // IMSOContactCard.Address is AddressEntry.ID
+                            Outlook.AddressEntry addr =
+                                Globals.ThisAddIn.Application.Session.GetAddressEntryFromID(
+                                card.Address);
+                            if (addr != null)
+                            {
+                            }
                         }
                     }
                 }
