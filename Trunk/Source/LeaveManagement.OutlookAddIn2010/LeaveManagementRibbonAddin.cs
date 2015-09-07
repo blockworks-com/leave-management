@@ -32,16 +32,25 @@ namespace LeaveManagement.OutlookAddIn2010
 
         public string GetCustomUI(string ribbonID)
         {
+            DateTime startTime = DateTime.Now;
             string result = string.Empty;
 
-            // Let's do this by convention instead of defining all of the cases and xml strings. For example:
-            // Microsoft.Outlook.Mail.Read will become LeaveManagement.OutlookAddIn2010.RibbonMailRead.xml
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
             try
             {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                // Let's do this by convention instead of defining all of the cases and xml strings. For example:
+                // Microsoft.Outlook.Mail.Read will become LeaveManagement.OutlookAddIn2010.RibbonMailRead.xml
                 result = GetResourceTextUsingConvention(ribbonID);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
 
             return result;
@@ -68,59 +77,75 @@ namespace LeaveManagement.OutlookAddIn2010
         // Only show Buttons if appropriate
         public bool OnGetVisible(Office.IRibbonControl control)
         {
-            //Contract.Requires(null != control);
-
-            if (null == control)
-            {
-                return false;
-            }
-
+            DateTime startTime = DateTime.Now;
             bool result = false;
-            switch (control.Id)
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
             {
-                // Buttons to Read and Handle received items
-                case "LmNewHireButton":
-                    result = true;
-                    break;
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-                case "LmAdjustmentButton":
-                    result = true;
-                    break;
+                //Contract.Requires(null != control);
 
-                case "LmDelegateButton":
-                    result = true;
-                    break;
+                if (null == control)
+                {
+                    return false;
+                }
 
-                case "LmLeaverButton":
-                    result = true;
-                    break;
+                switch (control.Id)
+                {
+                    // Buttons to Read and Handle received items
+                    case "LmNewHireButton":
+                        result = true;
+                        break;
 
-                // Buttons to Create new requests
-                case "LmNewHireComposeButton":
-                    result = true;
-                    break;
+                    case "LmAdjustmentButton":
+                        result = true;
+                        break;
 
-                case "LmAdjustmentComposeButton":
-                    result = true;
-                    break;
+                    case "LmDelegateButton":
+                        result = true;
+                        break;
 
-                case "LmDelegateComposeButton":
-                    result = true;
-                    break;
+                    case "LmLeaverButton":
+                        result = true;
+                        break;
 
-                case "LmLeaverComposeButton":
-                    result = true;
-                    break;
+                    // Buttons to Create new requests
+                    case "LmNewHireComposeButton":
+                        result = true;
+                        break;
 
-                // Button to Show and Handle items
-                case "LmPendingButton":
-                    result = true;
-                    break;
+                    case "LmAdjustmentComposeButton":
+                        result = true;
+                        break;
 
-                // Buttons to Create new leave requests
-                case "LmLeaveRequestComposeButton":
-                    result = false;
-                    break;
+                    case "LmDelegateComposeButton":
+                        result = true;
+                        break;
+
+                    case "LmLeaverComposeButton":
+                        result = true;
+                        break;
+
+                    // Button to Show and Handle items
+                    case "LmPendingButton":
+                        result = true;
+                        break;
+
+                    // Buttons to Create new leave requests
+                    case "LmLeaveRequestComposeButton":
+                        result = false;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
 
             return result;
@@ -129,92 +154,130 @@ namespace LeaveManagement.OutlookAddIn2010
         // Only show Tab when Explorer Selection is a received mail or when Inspector is a read note
         public bool Tab_OnGetVisible(Office.IRibbonControl control)
         {
-            if (control.Context is Outlook.Explorer)
+            DateTime startTime = DateTime.Now;
+            bool result = false;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
             {
-                Outlook.Explorer explorer =
-                    control.Context as Outlook.Explorer;
-                Outlook.Selection selection = explorer.Selection;
-                if (selection.Count == 1)
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                if (control.Context is Outlook.Explorer)
                 {
-                    if (selection[1] is Outlook.MailItem)
+                    Outlook.Explorer explorer =
+                        control.Context as Outlook.Explorer;
+                    Outlook.Selection selection = explorer.Selection;
+                    if (selection.Count == 1)
                     {
-                        Outlook.MailItem oMail =
-                            selection[1] as Outlook.MailItem;
-                        if (oMail.Sent == true)
+                        if (selection[1] is Outlook.MailItem)
                         {
-                            return true;
+                            Outlook.MailItem oMail =
+                                selection[1] as Outlook.MailItem;
+                            if (oMail.Sent == true)
+                            {
+                                result = true;
+                            }
+                            else
+                            {
+                                result = false;
+                            }
                         }
                         else
                         {
-                            return false;
+                            result = false;
                         }
                     }
                     else
                     {
-                        return false;
+                        result = false;
                     }
                 }
-                else
+                else if (control.Context is Outlook.Inspector)
                 {
-                    return false;
-                }
-            }
-            else if (control.Context is Outlook.Inspector)
-            {
-                Outlook.Inspector oInsp =
-                    control.Context as Outlook.Inspector;
-                if (oInsp.CurrentItem is Outlook.MailItem)
-                {
-                    Outlook.MailItem oMail =
-                        oInsp.CurrentItem as Outlook.MailItem;
-                    if (oMail.Sent == true)
+                    Outlook.Inspector oInsp =
+                        control.Context as Outlook.Inspector;
+                    if (oInsp.CurrentItem is Outlook.MailItem)
                     {
-                        return true;
+                        Outlook.MailItem oMail =
+                            oInsp.CurrentItem as Outlook.MailItem;
+                        if (oMail.Sent == true)
+                        {
+                            result = true;
+                        }
+                        else
+                        {
+                            result = false;
+                        }
                     }
                     else
                     {
-                        return false;
+                        result = false;
                     }
                 }
                 else
                 {
-                    return false;
+                    result = true;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return true;
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
             }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
+
+            return result;
         }
 
         public bool TabInspector_OnGetVisible(Office.IRibbonControl control)
         {
-            if (control.Context is Outlook.Inspector)
+            DateTime startTime = DateTime.Now;
+            bool result = false;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
             {
-                Outlook.Inspector oInsp =
-                    control.Context as Outlook.Inspector;
-                if (oInsp.CurrentItem is Outlook.MailItem)
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                if (control.Context is Outlook.Inspector)
                 {
-                    Outlook.MailItem oMail =
-                        oInsp.CurrentItem as Outlook.MailItem;
-                    if (oMail.Sent == true)
+                    Outlook.Inspector oInsp =
+                        control.Context as Outlook.Inspector;
+                    if (oInsp.CurrentItem is Outlook.MailItem)
                     {
-                        return true;
+                        Outlook.MailItem oMail =
+                            oInsp.CurrentItem as Outlook.MailItem;
+                        if (oMail.Sent == true)
+                        {
+                            result = true;
+                        }
+                        else
+                        {
+                            result = false;
+                        }
                     }
                     else
                     {
-                        return false;
+                        result = false;
                     }
                 }
                 else
                 {
-                    return false;
+                    result = true;
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return true;
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
             }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
+
+            return result;
         }
 
         #endregion Visibility Callbacks
@@ -224,53 +287,144 @@ namespace LeaveManagement.OutlookAddIn2010
         public void OnAdjustmentButtonClick(Office.IRibbonControl control)
         {
             DateTime startTime = DateTime.Now;
-            LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-            List<OutlookItem> items = GetItems(control);
-            string msg = "Adjustment";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-            LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+                List<OutlookItem> items = GetItems(control);
+                string msg = "Adjustment";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         public void OnDelegateButtonClick(Office.IRibbonControl control)
         {
-            List<OutlookItem> items = GetItems(control);
-            string msg = "Delegate";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                List<OutlookItem> items = GetItems(control);
+                string msg = "Delegate";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         public void OnLeaverButtonClick(Office.IRibbonControl control)
         {
-            List<OutlookItem> items = GetItems(control);
-            string msg = "Leaver";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                List<OutlookItem> items = GetItems(control);
+                string msg = "Leaver";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         public void OnLeaveRequestComposeButtonClick(Office.IRibbonControl control)
         {
-            List<OutlookItem> items = GetItems(control);
-            string msg = "Leave request";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                List<OutlookItem> items = GetItems(control);
+                string msg = "Leave request";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         public void OnNewHireButtonClick(Office.IRibbonControl control)
         {
-            List<OutlookItem> items = GetItems(control);
-            string msg = "Joiner";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                List<OutlookItem> items = GetItems(control);
+                string msg = "Joiner";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         public void OnPendingButtonClick(Office.IRibbonControl control)
         {
-            string msg = "Pending list";
-            MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                string msg = "Pending list";
+                MessageBox.Show(msg, "LeaveManagement.OutlookAddIn2010",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
         }
 
         #endregion Click Callbacks
@@ -279,156 +433,217 @@ namespace LeaveManagement.OutlookAddIn2010
 
         public stdole.IPictureDisp GetCurrentUserImage(Office.IRibbonControl control)
         {
-            //stdole.IPictureDisp pictureDisp = null;
-            Outlook.AddressEntry addrEntry =
+            DateTime startTime = DateTime.Now;
+            stdole.IPictureDisp result = null;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                //stdole.IPictureDisp pictureDisp = null;
+                Outlook.AddressEntry addrEntry =
                 Globals.ThisAddIn.Application.Session.CurrentUser.AddressEntry;
-            if (addrEntry.Type == "EX")
-            {
-                if (Globals.ThisAddIn._pictdisp != null)
+                if (addrEntry.Type == "EX")
                 {
-                    return Globals.ThisAddIn._pictdisp;
-                }
-                else
-                {
-                    return null;
+                    if (Globals.ThisAddIn._pictdisp != null)
+                    {
+                        result = Globals.ThisAddIn._pictdisp;
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
             }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
+
+            return result;
         }
 
         private static string GetResourceText(string resourceName)
         {
-            Assembly asm = Assembly.GetExecutingAssembly();
-            string[] resourceNames = asm.GetManifestResourceNames();
-            for (int i = 0; i < resourceNames.Length; ++i)
+            DateTime startTime = DateTime.Now;
+
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
             {
-                if (string.Compare(resourceName, resourceNames[i], StringComparison.OrdinalIgnoreCase) == 0)
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                Assembly asm = Assembly.GetExecutingAssembly();
+                string[] resourceNames = asm.GetManifestResourceNames();
+                for (int i = 0; i < resourceNames.Length; ++i)
                 {
-                    using (StreamReader resourceReader = new StreamReader(asm.GetManifestResourceStream(resourceNames[i])))
+                    if (string.Compare(resourceName, resourceNames[i], StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        if (resourceReader != null)
+                        using (StreamReader resourceReader = new StreamReader(asm.GetManifestResourceStream(resourceNames[i])))
                         {
-                            return resourceReader.ReadToEnd();
+                            if (resourceReader != null)
+                            {
+                                return resourceReader.ReadToEnd();
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
             return null;
         }
 
         private static string GetResourceTextUsingConvention(string ribbonId)
         {
-            // Replace namespace: Microsoft.Outlook.Mail.Read becomes LeaveManagement.OutlookAddIn2010.RibbonMailRead.
-            // Append .xml.
+            DateTime startTime = DateTime.Now;
+            string result = string.Empty;
 
-            StringBuilder sb = new StringBuilder(ribbonId);
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
 
-            sb.Replace(".", "");
-            sb.Replace("MicrosoftOutlook", "LeaveManagement.OutlookAddIn2010.Ribbon");
-            sb.Append(".xml");
+                // Replace namespace: Microsoft.Outlook.Mail.Read becomes
+                // LeaveManagement.OutlookAddIn2010.RibbonMailRead. Append .xml.
 
-            return GetResourceText(sb.ToString());
+                StringBuilder sb = new StringBuilder(ribbonId);
+
+                sb.Replace(".", "");
+                sb.Replace("MicrosoftOutlook", "LeaveManagement.OutlookAddIn2010.Ribbon");
+                sb.Append(".xml");
+
+                result = GetResourceText(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+            }
+            finally
+            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
+            }
+
+            return result;
         }
 
         private List<OutlookItem> GetItems(Office.IRibbonControl control)
         {
+            DateTime startTime = DateTime.Now;
             List<OutlookItem> result = new List<OutlookItem>();
 
-            string msg = string.Empty;
-            if (control.Context is Outlook.AttachmentSelection)
+            // Use a generic try-catch to ensure no exceptions are thrown to Outlook.
+            try
             {
-                Outlook.AttachmentSelection attachSel =
-                    control.Context as Outlook.AttachmentSelection;
-                foreach (Outlook.Attachment attach in attachSel)
+                LogWrapper.MainLogger.Debug(string.Format("Entering method '{0}'", MethodBase.GetCurrentMethod().Name));
+
+                string msg = string.Empty;
+                if (control.Context is Outlook.AttachmentSelection)
                 {
-                }
-            }
-            else if (control.Context is Outlook.Folder)
-            {
-                Outlook.Folder folder =
-                    control.Context as Outlook.Folder;
-            }
-            else if (control.Context is Outlook.Selection)
-            {
-                Outlook.Selection selection =
-                    control.Context as Outlook.Selection;
-                for (int i = 0; i < selection.Count; i++)
-                {
-                    OutlookItem olItem =
-                        new OutlookItem(selection[i + 1]); // 1 based index
-                    result.Add(olItem);
-                }
-            }
-            else if (control.Context is Outlook.OutlookBarShortcut)
-            {
-                Outlook.OutlookBarShortcut shortcut =
-                    control.Context as Outlook.OutlookBarShortcut;
-            }
-            else if (control.Context is Outlook.Store)
-            {
-                Outlook.Store store =
-                    control.Context as Outlook.Store;
-            }
-            else if (control.Context is Outlook.View)
-            {
-                Outlook.View view =
-                    control.Context as Outlook.View;
-            }
-            else if (control.Context is Outlook.Inspector)
-            {
-                Outlook.Inspector insp =
-                    control.Context as Outlook.Inspector;
-                OutlookItem olItem =
-                    new OutlookItem(insp.CurrentItem);
-                result.Add(olItem);
-            }
-            else if (control.Context is Outlook.Explorer)
-            {
-                Outlook.Explorer explorer =
-                    control.Context as Outlook.Explorer;
-                Outlook.Selection selection =
-                    explorer.Selection;
-                for (int i = 0; i < selection.Count; i++)
-                {
-                    OutlookItem olItem =
-                        new OutlookItem(selection[i + 1]); // 1 based index
-                    result.Add(olItem);
-                }
-            }
-            else if (control.Context is Outlook.NavigationGroup)
-            {
-                Outlook.NavigationGroup navGroup =
-                    control.Context as Outlook.NavigationGroup;
-            }
-            else if (control.Context is
-                Microsoft.Office.Core.IMsoContactCard)
-            {
-                Office.IMsoContactCard card =
-                    control.Context as Office.IMsoContactCard;
-                if (card.AddressType ==
-                    Office.MsoContactCardAddressType.
-                    msoContactCardAddressTypeOutlook)
-                {
-                    // IMSOContactCard.Address is AddressEntry.ID
-                    Outlook.AddressEntry addr =
-                        Globals.ThisAddIn.Application.Session.GetAddressEntryFromID(
-                        card.Address);
-                    if (addr != null)
+                    Outlook.AttachmentSelection attachSel =
+                        control.Context as Outlook.AttachmentSelection;
+                    foreach (Outlook.Attachment attach in attachSel)
                     {
                     }
                 }
+                else if (control.Context is Outlook.Folder)
+                {
+                    Outlook.Folder folder =
+                        control.Context as Outlook.Folder;
+                }
+                else if (control.Context is Outlook.Selection)
+                {
+                    Outlook.Selection selection =
+                        control.Context as Outlook.Selection;
+                    for (int i = 0; i < selection.Count; i++)
+                    {
+                        OutlookItem olItem =
+                            new OutlookItem(selection[i + 1]); // 1 based index
+                        result.Add(olItem);
+                    }
+                }
+                else if (control.Context is Outlook.OutlookBarShortcut)
+                {
+                    Outlook.OutlookBarShortcut shortcut =
+                        control.Context as Outlook.OutlookBarShortcut;
+                }
+                else if (control.Context is Outlook.Store)
+                {
+                    Outlook.Store store =
+                        control.Context as Outlook.Store;
+                }
+                else if (control.Context is Outlook.View)
+                {
+                    Outlook.View view =
+                        control.Context as Outlook.View;
+                }
+                else if (control.Context is Outlook.Inspector)
+                {
+                    Outlook.Inspector insp =
+                        control.Context as Outlook.Inspector;
+                    OutlookItem olItem =
+                        new OutlookItem(insp.CurrentItem);
+                    result.Add(olItem);
+                }
+                else if (control.Context is Outlook.Explorer)
+                {
+                    Outlook.Explorer explorer =
+                        control.Context as Outlook.Explorer;
+                    Outlook.Selection selection =
+                        explorer.Selection;
+                    for (int i = 0; i < selection.Count; i++)
+                    {
+                        OutlookItem olItem =
+                            new OutlookItem(selection[i + 1]); // 1 based index
+                        result.Add(olItem);
+                    }
+                }
+                else if (control.Context is Outlook.NavigationGroup)
+                {
+                    Outlook.NavigationGroup navGroup =
+                        control.Context as Outlook.NavigationGroup;
+                }
+                else if (control.Context is
+                    Microsoft.Office.Core.IMsoContactCard)
+                {
+                    Office.IMsoContactCard card =
+                        control.Context as Office.IMsoContactCard;
+                    if (card.AddressType ==
+                        Office.MsoContactCardAddressType.
+                        msoContactCardAddressTypeOutlook)
+                    {
+                        // IMSOContactCard.Address is AddressEntry.ID
+                        Outlook.AddressEntry addr =
+                            Globals.ThisAddIn.Application.Session.GetAddressEntryFromID(
+                            card.Address);
+                        if (addr != null)
+                        {
+                        }
+                    }
+                }
+                else if (control.Context is Outlook.NavigationModule)
+                {
+                }
+                else if (control.Context == null)
+                {
+                }
+                else
+                {
+                }
             }
-            else if (control.Context is Outlook.NavigationModule)
+            catch (Exception ex)
             {
+                LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
             }
-            else if (control.Context == null)
+            finally
             {
-            }
-            else
-            {
+                LogWrapper.MainLogger.Debug(string.Format("Exiting method '{0}' took '{1}' milliseconds", MethodBase.GetCurrentMethod().Name, ((TimeSpan)(DateTime.Now - startTime)).Milliseconds));
             }
 
             return result;
