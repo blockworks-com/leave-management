@@ -12,6 +12,12 @@ Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "LeaveManagement.OutlookAddi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeaveManagement.Common", "LeaveManagement.Common\LeaveManagement.Common.csproj", "{F63EDB78-1826-4980-8DEA-9C72AFBBA54F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A3B26815-DE9A-4B36-AF12-DAC62893EC1C}"
+	ProjectSection(SolutionItems) = preProject
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+		version.tt = version.tt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

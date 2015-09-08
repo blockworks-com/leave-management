@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using Office = Microsoft.Office.Core;
 using Outlook = Microsoft.Office.Interop.Outlook;
@@ -163,6 +166,73 @@ namespace LeaveManagement.OutlookAddIn2010
                         Outlook.ExchangeUser exchUser =
                             addrEntry.GetExchangeUser() as Outlook.ExchangeUser;
                         _pictdisp = exchUser.GetPicture() as stdole.IPictureDisp;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogWrapper.MainLogger.Error(ex, string.Format("Exception in method '{0}'", MethodBase.GetCurrentMethod().Name));
+                }
+
+                // Check for an updated version.
+                try
+                {
+                    String currentVersion = String.Empty;
+                    String newVersion = String.Empty;
+
+                    Assembly ai = Assembly.GetExecutingAssembly();
+                    if (ai != null)
+                    {
+                        FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(ai.Location);
+                        if (fvi != null)
+                        {
+                            currentVersion = fvi.FileVersion;
+
+                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.blockworks.com/Media/version.txt");
+                            if (request != null)
+                            {
+                                // execute the request
+                                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                                if (response != null)
+                                {
+                                    // we will read data via the response stream
+                                    Stream resStream = response.GetResponseStream();
+                                    if (resStream != null)
+                                    {
+                                        int count = 0;
+                                        do
+                                        {
+                                            byte[] buf = new byte[1024];
+                                            // fill the buffer with data
+                                            count = resStream.Read(buf, 0, buf.Length);
+
+                                            // make sure we read some data
+                                            if (count != 0)
+                                            {
+                                                // translate from bytes to ASCII text
+                                                newVersion = Encoding.UTF8.GetString(buf, 0, count);
+                                            }
+                                        }
+                                        while (count > 0); // any more data to read?
+
+                                        resStream.Close();
+
+                                        if (newVersion != currentVersion)
+                                        {
+                                            DialogResult result = MessageBox.Show(String.Format("There's a newer version of the Leave Management Addin. You currently have version {0} and the newer version is {1}.", currentVersion, newVersion),
+                                                Properties.Resources.About_MessageBox_Title,
+                                                MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                                            if (result == DialogResult.Yes)
+                                            {
+                                                MessageBox.Show("Close Outlook so the latest Addin can be installed. Once the installation is complete, restart Outlook.");
+                                                Process.Start(@"www.blockworks.com/Media/");
+                                            }
+                                        }
+                                    }
+
+                                    response.Close();
+                                }
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)

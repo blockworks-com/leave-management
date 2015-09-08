@@ -1,0 +1,90 @@
+﻿<#@ template language="C#" hostSpecific="True"#>
+<#@ output extension="txt" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#
+    int majorNumber = 1;
+    int minorNumber = 1;
+    int buildNumber = 0;
+    int revisionNumber = 0;
+	string error = string.Empty;
+
+    try
+    {
+        //If we cannot find the file, the revision number is set to zero,
+        //so even if the file doesn't exists the generation will run anyway.
+        //NOTE: we suppose we're not messing with the generated file
+        using(var f = File.OpenText(Host.ResolvePath("version.txt")))
+        {
+            //We're reading the previous revision number; in order to make the
+            //code as simple as we can, we're just going to rewrite it on the first row, commented.
+            //This is not elegant, but it's simple enough and quite effective.
+			string s = f.ReadLine();
+			string[] parts = s.Split('.');
+			majorNumber = int.Parse(parts[0]);
+			minorNumber = int.Parse(parts[1]);
+			buildNumber = int.Parse(parts[2]) + 1;
+            revisionNumber = int.Parse(parts[3]);
+        }
+
+		StringBuilder sb = new StringBuilder();
+
+        // Update SharedAssemblyInfo.
+        using (var f = File.OpenText(Host.ResolvePath("SharedAssemblyInfo.cs")))
+        {
+			// Read the first line of text
+			string line = f.ReadLine();
+
+			// Continue to read until you reach end of file
+			while (line != null) 
+			{
+				string c = "[assembly: AssemblyVersion(";
+				if (line.StartsWith(c))
+				{
+					line = string.Format("{0}\"{1}.{2}.{3}.{4}\")]{5}", 
+						c, majorNumber, minorNumber, 0, 0, line.Substring(line.LastIndexOf(']') + 1));
+
+				}
+
+				c = "[assembly: AssemblyInformationalVersion(";
+				if (line.StartsWith(c))
+				{
+					line = string.Format("{0}\"{1}.{2}.{3}.{4}\")]{5}", 
+						c, majorNumber, minorNumber, 0, 0, line.Substring(line.LastIndexOf(']') + 1));
+				}
+
+				c = "[assembly: AssemblyFileVersion(";
+				if (line.StartsWith(c))
+				{
+					line = string.Format("{0}\"{1}.{2}.{3}.{4}\")]{5}", 
+						c, majorNumber, minorNumber, buildNumber, revisionNumber, line.Substring(line.LastIndexOf(']') + 1));
+				}
+
+				//c = "[assembly: AssemblyCopyright(";
+				//if (line.StartsWith(c))
+				//{
+					//error = line.Substring(line.LastIndexOf(' ') - 1);
+					//line = "[assembly: AssemblyCopyright(\"Copyright © 2015\")]";
+				//}
+
+				// Append to sb
+				sb.AppendLine(line);
+
+				// Read the next line
+				line = f.ReadLine();
+			}
+
+			// Close the file
+			f.Close();
+
+			// Write the updates
+			File.WriteAllText(Host.ResolvePath("SharedAssemblyInfo.cs"), sb.ToString());
+		}
+    }
+	catch (Exception ex)
+    {
+        // Use the defaults set above 
+		error = "..." + ex.ToString();
+    }
+#>
+<#= majorNumber #>.<#= minorNumber #>.<#= buildNumber #>.<#= revisionNumber #><#= error #>

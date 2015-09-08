@@ -59,5 +59,14 @@ namespace LeaveManagement.OutlookAddIn2010.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave Management.
+        /// </summary>
+        internal static string About_MessageBox_Title {
+            get {
+                return ResourceManager.GetString("About_MessageBox_Title", resourceCulture);
+            }
+        }
     }
 }
