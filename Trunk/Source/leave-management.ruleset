@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Leave Management Rules" Description="" ToolsVersion="10.0">
+  <Include Path="DeadCodeRules.ruleset" Action="Default" />
+  <Include Path="InteroperabilityRules.ruleset" Action="Default" />
+  <Include Path="LineOfBusinessRules.ruleset" Action="Default" />
+  <Include Path="ReusableCodeRules.ruleset" Action="Default" />
+</RuleSet>

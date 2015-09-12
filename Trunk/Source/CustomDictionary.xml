@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>leave-management</Word>
+      <Word>Addin</Word>
+    </Recognized>
+    <DiscreteExceptions>
+      <Term>AddIn</Term>
+    </DiscreteExceptions>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>
+

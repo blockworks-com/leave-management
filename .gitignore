@@ -194,3 +194,7 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+Trunk/Source/CommandLine.cs
+Trunk/Source/junk.txt
+Trunk/Source/LeaveManagement.OutlookAddIn2010.Setup/Product - Copy.wxs
+Trunk/Source/LeaveManagement.OutlookAddIn2010/note.txt

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="Interoperability Rules" Description="These rules focus on ensuring compatibility with unmanaged languages using Managed C++ and/or P/Invoke" ToolsVersion="10.0">
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1400" Action="Warning" />
+    <Rule Id="CA1401" Action="Warning" />
+    <Rule Id="CA1402" Action="Warning" />
+    <Rule Id="CA1403" Action="Warning" />
+    <Rule Id="CA1404" Action="Warning" />
+    <Rule Id="CA1405" Action="Warning" />
+    <Rule Id="CA1406" Action="Warning" />
+    <Rule Id="CA1407" Action="Warning" />
+    <Rule Id="CA1408" Action="Warning" />
+    <Rule Id="CA1409" Action="Warning" />
+    <Rule Id="CA1410" Action="Warning" />
+    <Rule Id="CA1411" Action="Warning" />
+    <Rule Id="CA1412" Action="Warning" />
+    <Rule Id="CA1413" Action="Warning" />
+    <Rule Id="CA1414" Action="Warning" />
+    <Rule Id="CA1415" Action="Warning" />
+    <Rule Id="CA1900" Action="Warning" />
+    <Rule Id="CA1901" Action="Warning" />
+    <Rule Id="CA2111" Action="Warning" />
+    <Rule Id="CA2115" Action="Warning" />
+  </Rules>
+</RuleSet>

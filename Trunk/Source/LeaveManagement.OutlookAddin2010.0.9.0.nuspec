@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>LeaveManagement.OutlookAddin2010</id>
+        <version>0.9.0</version>
+        <authors>Blockworks Software</authors>
+        <iconUrl>http://www.blockworks.com/media/Releases/WideLogo.scale-100.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Leave Management Outlook Addin 2010 allows users to administer, track, request and view leave information. This addin supports both Users and Admins.</description>
+        <releaseNotes>## What's new
+
+* blah</releaseNotes>
+    </metadata>
+    <files>
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\DeltaCompressionDotNet.dll" target="lib\net45\DeltaCompressionDotNet.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\DeltaCompressionDotNet.MsDelta.dll" target="lib\net45\DeltaCompressionDotNet.MsDelta.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\DeltaCompressionDotNet.PatchApi.dll" target="lib\net45\DeltaCompressionDotNet.PatchApi.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\ICSharpCode.SharpZipLib.dll" target="lib\net45\ICSharpCode.SharpZipLib.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\ICSharpCode.SharpZipLib.xml" target="lib\net45\ICSharpCode.SharpZipLib.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\LeaveManagement.Common.dll" target="lib\net45\LeaveManagement.Common.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\LeaveManagement.OutlookAddIn2010.dll" target="lib\net45\LeaveManagement.OutlookAddIn2010.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\LeaveManagement.OutlookAddIn2010.dll.config" target="lib\net45\LeaveManagement.OutlookAddIn2010.dll.config" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\LeaveManagement.OutlookAddIn2010.dll.manifest" target="lib\net45\LeaveManagement.OutlookAddIn2010.dll.manifest" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\LeaveManagement.OutlookAddIn2010.vsto" target="lib\net45\LeaveManagement.OutlookAddIn2010.vsto" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Common.v4.0.Utilities.dll" target="lib\net45\Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Common.v4.0.Utilities.xml" target="lib\net45\Microsoft.Office.Tools.Common.v4.0.Utilities.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Outlook.dll" target="lib\net45\Microsoft.Office.Tools.Outlook.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" target="lib\net45\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Outlook.v4.0.Utilities.xml" target="lib\net45\Microsoft.Office.Tools.Outlook.v4.0.Utilities.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.Outlook.xml" target="lib\net45\Microsoft.Office.Tools.Outlook.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.v4.0.Framework.dll" target="lib\net45\Microsoft.Office.Tools.v4.0.Framework.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.Office.Tools.v4.0.Framework.xml" target="lib\net45\Microsoft.Office.Tools.v4.0.Framework.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.VisualStudio.Tools.Applications.Runtime.dll" target="lib\net45\Microsoft.VisualStudio.Tools.Applications.Runtime.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Microsoft.VisualStudio.Tools.Applications.Runtime.xml" target="lib\net45\Microsoft.VisualStudio.Tools.Applications.Runtime.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Mono.Cecil.dll" target="lib\net45\Mono.Cecil.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Mono.Cecil.Mdb.dll" target="lib\net45\Mono.Cecil.Mdb.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Mono.Cecil.Pdb.dll" target="lib\net45\Mono.Cecil.Pdb.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Mono.Cecil.Rocks.dll" target="lib\net45\Mono.Cecil.Rocks.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\NLog.config" target="lib\net45\NLog.config" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\NLog.dll" target="lib\net45\NLog.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\NLog.xml" target="lib\net45\NLog.xml" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Splat.dll" target="lib\net45\Splat.dll" />
+        <file src="LeaveManagement.OutlookAddIn2010\bin\Release\Squirrel.dll" target="lib\net45\Squirrel.dll" />
+    </files>
+</package>

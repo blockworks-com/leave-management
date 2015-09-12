@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="Leave Management Outlook Addin v1.2" Language="1033" Version="1.2.0.0" Manufacturer="Blockworks Software" UpgradeCode="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
@@ -86,7 +86,7 @@
       </Component>-->
       <Component Id="AddinVstoManifest">
         <File Id="FILE_AddinVstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" KeyPath="yes" />
-        <RegistryKey Root="HKLM" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
+        <RegistryKey Root="HKCR" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
           <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
           <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
           <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
@@ -132,6 +132,39 @@
       </Component>
       <Component Id="NLogXml">
         <File Id="FILE_NLogXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="DeltaCompressionDotNetDll">
+        <File Id="FILE_DeltaCompressionDotNetDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="DeltaCompressionDotNet.MsDeltaDll">
+        <File Id="FILE_DeltaCompressionDotNet.MsDeltaDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.MsDelta.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="DeltaCompressionDotNet.PatchApiDll">
+        <File Id="FILE_DeltaCompressionDotNet.PatchApiDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.PatchApi.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="ICSharpCode.SharpZipLibDll">
+        <File Id="FILE_ICSharpCode.SharpZipLibDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="ICSharpCode.SharpZipLibXml">
+        <File Id="FILE_ICSharpCode.SharpZipLibXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.xml" KeyPath="yes" />
+      </Component>
+      <Component Id="Mono.CecilDll">
+        <File Id="FILE_Mono.CecilDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Mono.Cecil.MdbDll">
+        <File Id="FILE_Mono.Cecil.MdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Mdb.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Mono.Cecil.PdbDll">
+        <File Id="FILE_Mono.Cecil.PdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Pdb.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Mono.Cecil.RocksDll">
+        <File Id="FILE_Mono.Cecil.RocksDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Rocks.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="SplatDll">
+        <File Id="FILE_SplatDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Splat.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="SquirrelDll">
+        <File Id="FILE_SquirrelDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Squirrel.dll" KeyPath="yes" />
       </Component>
     </ComponentGroup>
   </Fragment>
