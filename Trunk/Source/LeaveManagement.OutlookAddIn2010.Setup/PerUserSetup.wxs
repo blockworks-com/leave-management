@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Variables -->
+<?define Property_ProductVersion = "0.9.0.1" ?>
+<?define Property_ProductCode = "DF713EFA-4AF5-4AA4-AF4C-11B2BC707A78" ?>
+<?define Property_UpgradeVersion = "0.8.0.0" ?>
+<?define Property_UpgradeCode = "68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="$(var.Property_ProductCode)"
+           UpgradeCode="$(var.Property_UpgradeCode)"
+           Name="!(loc.Property_ProductName)"
+           Language="!(loc.Property_ProductLanguage)"
+           Version="$(var.Property_ProductVersion)"
+           Manufacturer="!(loc.Property_CompanyName)">
+
+    <Package Description="!(loc.Package_Description)"
+             Comments="!(loc.Package_Comments)"
+             InstallerVersion="200"
+             Compressed="yes"
+             InstallPrivileges="limited" />
+
+    <!-- This enables Windows Installer's major upgrade functionality so users can seamlessly -->
+    <!-- install a new version of the product and have the old version automatically uninstall behind -->
+    <!-- the scenes. -->
+    <Upgrade Id="$(var.Property_UpgradeCode)">
+      <UpgradeVersion Minimum="$(var.Property_ProductVersion)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED" />
+      <UpgradeVersion Minimum="$(var.Property_UpgradeVersion)" IncludeMinimum="yes" Maximum="$(var.Property_ProductVersion)" IncludeMaximum="no" Property="OLDERVERSIONBEINGUPGRADED" />
+    </Upgrade>
+
+    <!-- This prevents users from installing a newer version of this product is already installed. -->
+    <CustomAction Id="CA_BlockOlderVersionInstall" Error="!(loc.LaunchCondition_LaterVersion)" />
+
+    <!-- This enforces that the ALLUSERS property is not set because this is a per-user installation. -->
+    <Condition Message="!(loc.LaunchCondition_AllUsers)">
+      NOT ALLUSERS
+    </Condition>
+
+    <!-- This prevents users from installing on unsupported operating systems. -->
+    <CustomAction Id="CA_ErrWrongWindowsVersion" Error="!(loc.LaunchCondition_WrongOSVersion)" />
+
+    <!-- This is a list of directories that are used as installation locations. -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder" Name="AppData">
+        <Directory Id="CompanyDirectory" Name="!(loc.Property_CompanyName)">
+          <Directory Id="AppRootDirectory" Name="!(loc.Property_ProductName)" />
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- This is a list of all components installed as a part of this product. A component is the        -->
+    <!-- smallest atomic unit of installation in Windows Installer. Each component must have a unique    -->
+    <!-- GUID. In general, it is recommended that each file be installed by a separate component in      -->
+    <!-- order to avoid reference counting problems and make future servicing of this product easier.    -->
+    <!-- Each component is listed as a child of the DirectoryRef that represents the directory that      -->
+    <!-- the file it contains will install to.                                                           -->
+    <DirectoryRef Id="AppRootDirectory">
+      <Component Id="CreateAppRootDirectory" Guid="52AA907F-CC63-457F-9458-6ED03D66405A" DiskId="1">
+        <CreateFolder />
+        <RemoveFolder Id="AppRootDirectory" On="uninstall" />
+        <RegistryKey Root="HKCU" Key="Software\!(loc.Property_CompanyName)\!(loc.Property_ProductName)" Action="createAndRemoveOnUninstall">
+          <RegistryValue Name="Version" Value="[ProductVersion]" Type="string" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
+
+    <!-- This is separate to resolve the ICE64 error. -->
+    <DirectoryRef Id="CompanyDirectory">
+      <Component Id="CreateCompanyDirectory" Guid="84AA17EC-1671-498E-9AA9-700ED4FD8C34" DiskId="1">
+        <CreateFolder />
+        <RemoveFolder Id="CompanyDirectory" On="uninstall" />
+        <RegistryKey Root="HKCU" Key="Software\!(loc.Property_CompanyName)\!(loc.Property_ProductName)" Action="createAndRemoveOnUninstall">
+          <RegistryValue Name="Installed" Value="1" Type="integer" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
+
+    <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
+    <!-- only one feature. Each feature contains a list of components that it will install. Features can -->
+    <!-- can be displayed and allow user selection in setup UI if desired.                               -->
+    <Feature Id="AppRootFeature" Title="Office Add-in" Level="1">
+      <ComponentRef Id="CreateCompanyDirectory" />
+      <ComponentRef Id="CreateAppRootDirectory" />
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="RegisterAddin" />
+    </Feature>
+
+    <!-- The source files are in a cab file that will be embedded -->
+    <Media Id="1" Cabinet="Application.cab" EmbedCab="yes" />
+
+    <!-- The InstallExecuteSequence table describes the order that actions will be executed during       -->
+    <!-- installation, repair and uninstall of this product.                                             -->
+    <InstallExecuteSequence>
+      <Custom Action="CA_BlockOlderVersionInstall" After="FindRelatedProducts">
+        <![CDATA[NEWERVERSIONDETECTED]]>
+      </Custom>
+      <RemoveExistingProducts After="InstallFinalize" />
+      <LaunchConditions After="AppSearch" />
+
+      <!-- This searches for Windows version 6.0. -->
+      <!--<Custom Action="CA_ErrWrongWindowsVersion" Before="CostInitialize">
+        <![CDATA[(NOT VersionNT = 600)]]>
+      </Custom>-->
+    </InstallExecuteSequence>
+
+    <!-- These properties define links that will appear in the Add/Remove Programs control panel. -->
+    <Property Id="ARPHELPLINK" Value="!(loc.Property_ArpHelpLink)" />
+    <Property Id="ARPURLINFOABOUT" Value="!(loc.Property_ArpUrlInfoAbout)" />
+
+    <!-- This property defines the ALLUSERS property and sets it to blank, which indicates that this -->
+    <!-- is per-user instead of per-machine. -->
+    <Property Id="ALLUSERS" Secure="yes" />
+
+    <!-- Specify the WiXUI dialog set to use for the setup UI. -->
+    <!--<UIRef Id="WixUI_Minimal" />-->
+
+    <!-- Override the default license agreement text. -->
+    <!--<WixVariable Id="WixUILicenseRtf" Value="License.rtf" />-->
+  </Product>
+
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="AppRootDirectory">
+      <Component Id="ProductFiles" Guid="906224F8-0B61-4D07-859E-2F957E6CF21B" DiskId="1">
+        <CreateFolder />
+        <!--<RemoveFolder Id="AppRootDirectory" On="uninstall" />-->
+        <RegistryKey Root="HKCU" Key="Software\!(loc.Property_CompanyName)\!(loc.Property_ProductName)" Action="createAndRemoveOnUninstall">
+          <RegistryValue Name="Installed" Value="1" Type="integer" KeyPath="yes" />
+        </RegistryKey>
+        <File Id="FILE_AddinDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath)" />
+        <File Id="FILE_AddinConfig" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).config" />
+        <File Id="FILE_AddinManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetPath).manifest" />
+        <!--<File Id="FILE_AddInFeatureToggle" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)FeatureToggle.Core.dll" />-->
+        <!--<File Id="FILE_AddInUserContext" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.UserContext.dll" />-->
+        <!--<File Id="FILE_AddInUserContextAD" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.UserContext.ActiveDirectory.dll" />-->
+        <!--<File Id="FILE_AddInRepository" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Repository.dll" />-->
+        <!--<File Id="FILE_AddInModel" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Model.dll" />-->
+        <File Id="FILE_AddinCommonDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)LeaveManagement.Common.dll" />
+        <File Id="FILE_NLogConfig" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.config" />
+        <File Id="FILE_NLogDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.dll" />
+        <File Id="FILE_NLogXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.xml" />
+        <File Id="FILE_DeltaCompressionDotNetDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.dll" />
+        <File Id="FILE_DeltaCompressionDotNet.MsDeltaDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.MsDelta.dll" />
+        <File Id="FILE_DeltaCompressionDotNet.PatchApiDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.PatchApi.dll" />
+        <File Id="FILE_ICSharpCode.SharpZipLibDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.dll" />
+        <File Id="FILE_ICSharpCode.SharpZipLibXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.xml" />
+        <File Id="FILE_Mono.CecilDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.dll" />
+        <File Id="FILE_Mono.Cecil.MdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Mdb.dll" />
+        <File Id="FILE_Mono.Cecil.PdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Pdb.dll" />
+        <File Id="FILE_Mono.Cecil.RocksDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Rocks.dll" />
+        <File Id="FILE_SplatDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Splat.dll" />
+        <File Id="FILE_SquirrelDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Squirrel.dll" />
+
+        <File Id="FILE_ToolsCommonUtilitiesDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
+        <File Id="FILE_ToolsCommonUtilitiesXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.xml" />
+        <File Id="FILE_ToolsOutlookUtilitiesDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll" />
+        <File Id="FILE_ToolsOutlookUtilitiesXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.v4.0.Utilities.xml" />
+        <File Id="FILE_OfficeToolsOutlookDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.dll" />
+        <File Id="FILE_OfficeToolsOutlookXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Outlook.xml" />
+        <File Id="FILE_OfficeToolsDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.v4.0.Framework.dll" />
+        <File Id="FILE_OfficeToolsXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.v4.0.Framework.xml" />
+        <File Id="FILE_VSToolsRuntimeDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.VisualStudio.Tools.Applications.Runtime.dll" />
+        <File Id="FILE_VSToolsRuntimeXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.VisualStudio.Tools.Applications.Runtime.xml" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="RegisterAddin" Directory="AppRootDirectory">
+      <!--<Component Id="ManifestFile">
+        <File Id="FILE_Manifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Manifest.xml" />
+      </Component>-->
+      <Component Id="AddinVstoManifest" Guid="0053A7D6-6C93-4842-B682-3C9DAC6D112A" DiskId="1">
+        <File Id="FILE_AddinVstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" />
+        <RegistryKey Root="HKCU" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
+          <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
+          <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
+          <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
+          <RegistryValue Name="Manifest" Value="[#FILE_AddinVstoManifest]|vstolocal" Type="string" Action="write" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

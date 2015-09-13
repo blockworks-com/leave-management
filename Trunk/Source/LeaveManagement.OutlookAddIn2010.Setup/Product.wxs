@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="Leave Management Outlook Addin v1.2" Language="1033" Version="1.2.0.0" Manufacturer="Blockworks Software" UpgradeCode="68F1FB8C-6A5A-4BD5-8709-6B4E0AF6D73C">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
@@ -43,7 +43,7 @@
         <RemoveFolder Id="StartMenuDir" On="uninstall" />
         <RemoveFolder Id="LeaveManagement" Directory="LeaveManagement" On="uninstall" />
         <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
-        <RegistryValue Root="HKCU" Key="Software\Blockworks Software\Leave Management Outlook Addin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\Blockworks Software\Leave Management Outlook Addin" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
@@ -86,7 +86,7 @@
       </Component>-->
       <Component Id="AddinVstoManifest">
         <File Id="FILE_AddinVstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" KeyPath="yes" />
-        <RegistryKey Root="HKCR" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
+        <RegistryKey Root="HKMR" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
           <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
           <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
           <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
