@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="Property_CompanyName">Blockworks Software</String>
   <String Id="Property_ProductName">Leave Management Outlook Add-in 2010</String>
   <String Id="Property_ProductLanguage">1033</String>
-  <String Id="Property_CompanyName">Blockworks Software</String>
-  <String Id="Package_Description">Some desc</String>
+  <String Id="Property_FriendlyName">Blockworks Leave Management Add-in</String>
+  <String Id="Package_Description">The Add-in provides functionality to track leave information and connects to Blockworks Leave Management services.</String>
   <String Id="Package_Comments">Some comment</String>
   <String Id="LaunchCondition_AllUsers">AllUsers</String>
   <String Id="LaunchCondition_LaterVersion">A newer version is already installed.</String>

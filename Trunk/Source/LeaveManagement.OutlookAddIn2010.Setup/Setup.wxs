@@ -46,6 +46,7 @@
           <Directory Id="AppRootDirectory" Name="!(loc.Property_ProductName)" />
         </Directory>
       </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop" />
     </Directory>
 
     <!-- This is a list of all components installed as a part of this product. A component is the        -->
@@ -75,12 +76,28 @@
       </Component>
     </DirectoryRef>
 
+    <!-- This is separate to resolve the ICE64 error. -->
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="CreateUninstallShortcut" Guid="10DF6F14-7648-496B-B901-C7E4BA752245" DiskId="1">
+        <Shortcut Id="UninstallProduct"
+            Name="Uninstall !(loc.Property_ProductName)"
+            Target="[SystemFolder]msiexec.exe"
+            Arguments="/x [ProductCode]"
+            Description="Uninstalls !(loc.Property_ProductName)" />
+        <RemoveFolder Id="DesktopFolder" On="uninstall" />
+        <RegistryKey Root="HKCU" Key="Software\!(loc.Property_CompanyName)\!(loc.Property_ProductName)" Action="createAndRemoveOnUninstall">
+          <RegistryValue Name="UninstallShortcut" Value="1" Type="integer" KeyPath="yes" />
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
+
     <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
     <!-- only one feature. Each feature contains a list of components that it will install. Features can -->
     <!-- can be displayed and allow user selection in setup UI if desired.                               -->
     <Feature Id="AppRootFeature" Title="Office Add-in" Level="1">
       <ComponentRef Id="CreateCompanyDirectory" />
       <ComponentRef Id="CreateAppRootDirectory" />
+      <ComponentRef Id="CreateUninstallShortcut" />
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentGroupRef Id="RegisterAddin" />
     </Feature>
@@ -138,17 +155,19 @@
         <File Id="FILE_NLogConfig" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.config" />
         <File Id="FILE_NLogDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.dll" />
         <File Id="FILE_NLogXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.xml" />
-        <File Id="FILE_DeltaCompressionDotNetDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.dll" />
-        <File Id="FILE_DeltaCompressionDotNet.MsDeltaDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.MsDelta.dll" />
-        <File Id="FILE_DeltaCompressionDotNet.PatchApiDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.PatchApi.dll" />
-        <File Id="FILE_ICSharpCode.SharpZipLibDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.dll" />
-        <File Id="FILE_ICSharpCode.SharpZipLibXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.xml" />
-        <File Id="FILE_Mono.CecilDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.dll" />
-        <File Id="FILE_Mono.Cecil.MdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Mdb.dll" />
-        <File Id="FILE_Mono.Cecil.PdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Pdb.dll" />
-        <File Id="FILE_Mono.Cecil.RocksDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Rocks.dll" />
-        <File Id="FILE_SplatDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Splat.dll" />
-        <File Id="FILE_SquirrelDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Squirrel.dll" />
+        <!--<File Id="FILE_NLogEventHubXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)NLog.xml" />-->
+
+        <!--<File Id="FILE_DeltaCompressionDotNetDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.dll" />-->
+        <!--<File Id="FILE_DeltaCompressionDotNet.MsDeltaDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.MsDelta.dll" />-->
+        <!--<File Id="FILE_DeltaCompressionDotNet.PatchApiDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)DeltaCompressionDotNet.PatchApi.dll" />-->
+        <!--<File Id="FILE_ICSharpCode.SharpZipLibDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.dll" />-->
+        <!--<File Id="FILE_ICSharpCode.SharpZipLibXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)ICSharpCode.SharpZipLib.xml" />-->
+        <!--<File Id="FILE_Mono.CecilDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.dll" />-->
+        <!--<File Id="FILE_Mono.Cecil.MdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Mdb.dll" />-->
+        <!--<File Id="FILE_Mono.Cecil.PdbDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Pdb.dll" />-->
+        <!--<File Id="FILE_Mono.Cecil.RocksDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Mono.Cecil.Rocks.dll" />-->
+        <!--<File Id="FILE_SplatDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Splat.dll" />-->
+        <!--<File Id="FILE_SquirrelDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Squirrel.dll" />-->
 
         <File Id="FILE_ToolsCommonUtilitiesDll" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.dll" />
         <File Id="FILE_ToolsCommonUtilitiesXml" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)Microsoft.Office.Tools.Common.v4.0.Utilities.xml" />
@@ -171,9 +190,9 @@
       </Component>-->
       <Component Id="AddinVstoManifest" Guid="0053A7D6-6C93-4842-B682-3C9DAC6D112A" DiskId="1">
         <File Id="FILE_AddinVstoManifest" Source="$(var.LeaveManagement.OutlookAddIn2010.TargetDir)$(var.LeaveManagement.OutlookAddIn2010.TargetName).vsto" />
-        <RegistryKey Root="HKCU" Key="Software\Microsoft\Office\Outlook\Addins\Blockworks Leave Management Outlook 2010 Add-in">
-          <RegistryValue Name="Description" Value="Blockworks Leave Management Outlook 2010 Addin" Type="string" Action="write" />
-          <RegistryValue Name="FriendlyName" Value="Blockworks Leave Management Outlook 2010" Type="string" Action="write" />
+        <RegistryKey Root="HKCU" Key="Software\Microsoft\Office\Outlook\Addins\!(loc.Property_CompanyName) !(loc.Property_ProductName)">
+          <RegistryValue Name="Description" Value="!(loc.Property_CompanyName) !(loc.Property_ProductName)" Type="string" Action="write" />
+          <RegistryValue Name="FriendlyName" Value="!(loc.Property_FriendlyName)" Type="string" Action="write" />
           <RegistryValue Name="LoadBehavior" Value="3" Type="integer" Action="write" />
           <RegistryValue Name="Manifest" Value="[#FILE_AddinVstoManifest]|vstolocal" Type="string" Action="write" KeyPath="yes" />
         </RegistryKey>
