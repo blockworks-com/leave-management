@@ -77,6 +77,7 @@
     </DirectoryRef>
 
     <!-- This is separate to resolve the ICE64 error. -->
+    <?ifdef var.Debug ?>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="CreateUninstallShortcut" Guid="10DF6F14-7648-496B-B901-C7E4BA752245" DiskId="1">
         <Shortcut Id="UninstallProduct"
@@ -90,6 +91,7 @@
         </RegistryKey>
       </Component>
     </DirectoryRef>
+    <?endif?>
 
     <!-- This is a list of features that are installed as a part of this product. In this case, there is -->
     <!-- only one feature. Each feature contains a list of components that it will install. Features can -->
@@ -97,7 +99,10 @@
     <Feature Id="AppRootFeature" Title="Office Add-in" Level="1">
       <ComponentRef Id="CreateCompanyDirectory" />
       <ComponentRef Id="CreateAppRootDirectory" />
+      <?ifdef var.Debug ?>
+      <!-- Reference debug-only components or actions here -->
       <ComponentRef Id="CreateUninstallShortcut" />
+      <?endif?>
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentGroupRef Id="RegisterAddin" />
     </Feature>

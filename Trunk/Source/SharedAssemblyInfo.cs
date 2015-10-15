@@ -37,4 +37,4 @@ using System.Runtime.InteropServices;
 // The AssemblyFileVersionAttribute is incremented with every build in order to distinguish one build from another.
 // AssemblyFileVersion is specified in AssemblyVersionInfo.cs so that it can be easily incremented by the automated
 // build process.
-[assembly: AssemblyFileVersion("0.9.545.0")]
+[assembly: AssemblyFileVersion("0.9.551.0")]
