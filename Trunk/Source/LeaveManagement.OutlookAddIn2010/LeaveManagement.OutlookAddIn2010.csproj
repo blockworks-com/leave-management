@@ -310,7 +310,10 @@
     <ManifestKeyFile>LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>C624995F928A6320D15E0ABA4728FB1EEB157D9B</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>BC68660EA193B23236CAE5AB434CFBC5F294124C</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
