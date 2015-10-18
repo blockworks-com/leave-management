@@ -27,11 +27,10 @@ install:
  - secure-file\tools\secure-file -decrypt .\Trunk\Source\LeaveManagement.OutlookAddIn2010\TemporaryKey.pfx.enc -secret %pfx_secret%
  - appveyor DownloadFile http://blockworks.com/Media/Default/LeaveManagement/vsto-pack.zip
  - 7z x -oC:\ vsto-pack.zip
- - "C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil" /i C:\Microsoft.VisualStudio.Tools.Applications.BuildTasks.dll
- - "C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil" /i C:\Microsoft.VisualStudio.Tools.Office.BuildTasks.dll
+ - C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil /i C:\Microsoft.VisualStudio.Tools.Applications.BuildTasks.dll
+ - C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools\gacutil /i C:\Microsoft.VisualStudio.Tools.Office.BuildTasks.dll
  - reg import C:\vsto1.reg
  - reg import C:\vsto2.reg
  - reg import C:\vsto3.reg
  - reg import C:\vsto4.reg
-
 
