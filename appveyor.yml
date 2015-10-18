@@ -1,13 +1,20 @@
 # build Configuration, i.e. Debug, Release, etc. 
 configuration: 
-  - Debug 
+ - Debug 
 #  - Release 
 
 build: 
-  parallel: true                   
-  project: $(project_name)
+ parallel: true                   
+ project: $(project_name)
 
 environment:
-  SolutionDir: $(APPVEYOR_BUILD_FOLDER)
-  matrix:
-    - project_name: Trunk/Source/LeaveManagement-outlook.sln
+ SolutionDir: $(APPVEYOR_BUILD_FOLDER)
+ matrix:
+  - project_name: Trunk/Source/LeaveManagement-outlook.sln
+
+# before build scripts 
+before_build: 
+ - ps: Import-PfxCertificate -FilePath .\Trunk\Source\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx -CertStoreLocation cert:\CurrentUser\My 
+
+build_script: 
+ - msbuild Trunk\Source\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /t:Publish /p:PublishUrl=c:\projects 
