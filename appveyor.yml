@@ -10,5 +10,4 @@ build:
 environment:
   SolutionDir: $(APPVEYOR_BUILD_FOLDER)
   matrix:
-    - project_name: /Trunk/Source/LeaveManagement.sln
-    - project_name: /Trunk/Source/LeaveManagement-outlook.sln
+    - project_name: Trunk/Source/LeaveManagement-outlook.sln
