@@ -238,7 +238,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx" />
+    <None Include="TemporaryKey.pfx" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -307,13 +307,13 @@
     <ManifestTimestampUrl>http://timestamp.comodoca.com/authenticode</ManifestTimestampUrl>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>BC68660EA193B23236CAE5AB434CFBC5F294124C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
