@@ -1,0 +1,13 @@
+# build Configuration, i.e. Debug, Release, etc. 
+configuration: 
+  - Debug 
+#  - Release 
+
+build: 
+  parallel: true                   
+  project: $(project_name)
+
+environment:
+  SolutionDir: $(APPVEYOR_BUILD_FOLDER)
+  matrix:
+    - project_name: Trunk/Source/LeaveManagement-outlook.sln
