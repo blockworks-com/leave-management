@@ -1,6 +1,10 @@
+# build Configuration, i.e. Debug, Release, etc. 
 configuration: 
- - Release
- - Debug
+  - Debug 
+  - Release 
+
+build: 
+  parallel: true                   
 
 environment
- SolutionDir: $(APPVEYOR_BUILD_FOLDER)\Trunk\Source
+  SolutionDir: $(APPVEYOR_BUILD_FOLDER)\Trunk\Source
