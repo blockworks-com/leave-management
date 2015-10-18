@@ -25,3 +25,5 @@ build_script:
 install:
  - nuget install secure-file -ExcludeVersion
  - secure-file\tools\secure-file -decrypt .\Trunk\Source\LeaveManagement.OutlookAddIn2010\TemporaryKey.pfx.enc -secret %pfx_secret%
+ - appveyor DownloadFile http://blockworks.com/Media/Default/LeaveManagement/vsto-pack.zip
+ - 7z x -oC:\ vsto-pack.zip
