@@ -18,3 +18,11 @@ before_build:
 
 build_script: 
  - msbuild .\Trunk\Source\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /t:Publish /p:PublishUrl=c:\projects 
+
+install:
+ - nuget install secure-file -ExcludeVersion
+ - secure-file\tools\secure-file -decrypt .\Trunk\Source\LeaveManagement.OutlookAddIn2010\TemporaryKey.pfx.enc -secret %pfx_secret%
+
+environment:
+  pfx_secret:
+    secure: 65n6AyPYcgulP7Sgn2/Wrw==
