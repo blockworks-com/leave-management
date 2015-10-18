@@ -11,6 +11,8 @@ environment:
  SolutionDir: $(APPVEYOR_BUILD_FOLDER)
  matrix:
   - project_name: Trunk/Source/LeaveManagement-outlook.sln
+ pfx_secret:
+  secure: 65n6AyPYcgulP7Sgn2/Wrw==
 
 # before build scripts 
 before_build: 
@@ -22,7 +24,3 @@ build_script:
 install:
  - nuget install secure-file -ExcludeVersion
  - secure-file\tools\secure-file -decrypt .\Trunk\Source\LeaveManagement.OutlookAddIn2010\TemporaryKey.pfx.enc -secret %pfx_secret%
-
-environment:
-  pfx_secret:
-    secure: 65n6AyPYcgulP7Sgn2/Wrw==
