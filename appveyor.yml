@@ -6,5 +6,5 @@ configuration:
 build: 
   parallel: true                   
 
-environment
+environment:
   SolutionDir: $(APPVEYOR_BUILD_FOLDER)\Trunk\Source
