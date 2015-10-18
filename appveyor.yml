@@ -1,0 +1,6 @@
+configuration: 
+ - Release
+ - Debug
+
+environment
+ SolutionDir: $(APPVEYOR_BUILD_FOLDER)\Trunk\Source
