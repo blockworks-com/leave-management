@@ -5,6 +5,10 @@ configuration:
 
 build: 
   parallel: true                   
+  project: $(project_name)
 
 environment:
-  SolutionDir: $(APPVEYOR_BUILD_FOLDER)/Trunk/Source
+  SolutionDir: $(APPVEYOR_BUILD_FOLDER)
+  matrix:
+    - project_name: /Trunk/Source/LeaveManagement.sln
+    - project_name: /Trunk/Source/LeaveManagement-outlook.sln
