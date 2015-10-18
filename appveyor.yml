@@ -14,7 +14,7 @@ environment:
 
 # before build scripts 
 before_build: 
- - ps: Import-PfxCertificate -FilePath .\Trunk\Source\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx -CertStoreLocation cert:\CurrentUser\My 
+ - ps: Import-PfxCertificate -FilePath .\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010_TemporaryKey.pfx -CertStoreLocation cert:\CurrentUser\My 
 
 build_script: 
- - msbuild Trunk\Source\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /t:Publish /p:PublishUrl=c:\projects 
+ - msbuild .\LeaveManagement.OutlookAddIn2010\LeaveManagement.OutlookAddIn2010.csproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" /t:Publish /p:PublishUrl=c:\projects 
