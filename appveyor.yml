@@ -1,7 +1,7 @@
 # build Configuration, i.e. Debug, Release, etc. 
 configuration: 
   - Debug 
-  - Release 
+#  - Release 
 
 build: 
   parallel: true                   
